@@ -478,6 +478,7 @@ public class Modules extends System<Modules> {
         add(new NoFall());
         add(new NoSlow());
         add(new Parkour());
+        add(new Premeditate());
         add(new ReverseStep());
         add(new SafeWalk());
         add(new Scaffold());
@@ -515,6 +516,7 @@ public class Modules extends System<Modules> {
         add(new LightOverlay());
         add(new LogoutSpots());
         add(new Marker());
+        add(new MetalFinder());
         add(new Nametags());
         add(new NoRender());
         add(new PopChams());
