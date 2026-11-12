@@ -15,6 +15,8 @@ import meteordevelopment.meteorclient.utils.render.color.SettingColor;
 import java.util.ArrayList;
 import java.util.List;
 
+import static meteordevelopment.meteorclient.utils.render.color.RainbowColor.getInterpolation;
+
 public class ActiveModulesHud extends HudElement {
     public static final HudElementInfo<ActiveModulesHud> INFO = new HudElementInfo<>(Hud.GROUP, "active-modules", "Displays your active modules.", ActiveModulesHud::new);
 
@@ -116,24 +118,8 @@ public class ActiveModulesHud extends HudElement {
         .description("Rainbow spread of rainbow color mode.")
         .defaultValue(0.01)
         .sliderMin(0.001)
-        .sliderMax(0.05)
+        .sliderMax(0.25)
         .decimalPlaces(4)
-        .visible(() -> colorMode.get() == ColorMode.Rainbow)
-        .build()
-    );
-
-    private final Setting<Double> rainbowSaturation = sgColor.add(new DoubleSetting.Builder()
-        .name("rainbow-saturation")
-        .defaultValue(1.0d)
-        .sliderRange(0.0d, 1.0d)
-        .visible(() -> colorMode.get() == ColorMode.Rainbow)
-        .build()
-    );
-
-    private final Setting<Double> rainbowBrightness = sgColor.add(new DoubleSetting.Builder()
-        .name("rainbow-brightness")
-        .defaultValue(1.0d)
-        .sliderRange(0.0d, 1.0d)
         .visible(() -> colorMode.get() == ColorMode.Rainbow)
         .build()
     );
@@ -267,7 +253,7 @@ public class ActiveModulesHud extends HudElement {
             case Random -> color = module.color;
             case Rainbow -> {
                 rainbowHue2 += rainbowSpread.get();
-                int c = java.awt.Color.HSBtoRGB((float) rainbowHue2, rainbowSaturation.get().floatValue(), rainbowBrightness.get().floatValue());
+                int c = getInterpolation(rainbowHue2);
                 rainbow.r = Color.toRGBAR(c);
                 rainbow.g = Color.toRGBAG(c);
                 rainbow.b = Color.toRGBAB(c);
