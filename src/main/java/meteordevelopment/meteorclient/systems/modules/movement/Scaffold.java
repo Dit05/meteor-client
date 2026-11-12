@@ -300,8 +300,12 @@ public class Scaffold extends Module {
         if (blocksFilter.get() == ListMode.Blacklist && blocks.get().contains(block)) return false;
         else if (blocksFilter.get() == ListMode.Whitelist && !blocks.get().contains(block)) return false;
 
-        if (!Block.isShapeFullCube(block.getDefaultState().getCollisionShape(mc.world, pos))) return false;
-        return !(block instanceof FallingBlock) || !FallingBlock.canFallThrough(mc.world.getBlockState(pos));
+        if (blocksFilter.get() == ListMode.Blacklist) {
+            if (!Block.isShapeFullCube(block.getDefaultState().getCollisionShape(mc.world, pos))) return false;
+            return !(block instanceof FallingBlock) || !FallingBlock.canFallThrough(mc.world.getBlockState(pos));
+        } else {
+            return true;
+        }
     }
 
     private boolean place(BlockPos bp) {
