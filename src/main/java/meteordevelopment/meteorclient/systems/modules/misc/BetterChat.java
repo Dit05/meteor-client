@@ -41,6 +41,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
+import java.util.Random;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.regex.PatternSyntaxException;
@@ -62,6 +63,13 @@ public class BetterChat extends Module {
     private final Setting<Boolean> fancy = sgGeneral.add(new BoolSetting.Builder()
         .name("fancy-chat")
         .description("Makes your messages ғᴀɴᴄʏ!")
+        .defaultValue(false)
+        .build()
+    );
+
+    private final Setting<Boolean> braindamaged = sgGeneral.add(new BoolSetting.Builder()
+        .name("braindamaged")
+        .description("Makes the casualties unknown.")
         .defaultValue(false)
         .build()
     );
@@ -307,6 +315,8 @@ public class BetterChat extends Module {
 
         if (fancy.get()) message = applyFancy(message);
 
+        if (braindamaged.get()) message = applyBraindamage(message);
+
         message = getPrefix() + message + getSuffix();
 
         if (coordsProtection.get() && containsCoordinates(message)) {
@@ -514,6 +524,39 @@ public class BetterChat extends Module {
 
         for (char ch : message.toCharArray()) {
             sb.append(SMALL_CAPS.getOrDefault(ch, ch));
+        }
+
+        return sb.toString();
+    }
+
+    // Braindamage
+
+    private Random braindamageRandom = new Random();
+
+    private String applyBraindamage(String message) {
+        StringBuilder sb = new StringBuilder(message);
+
+        for (int j = 0; j < sb.length(); j++)
+        {
+            if (Character.isAlphabetic(sb.charAt(j)))
+            {
+                if (braindamageRandom.nextFloat() < 0.12f)
+                {
+                    char value = sb.charAt(j);
+                    for (int k = 0; k < braindamageRandom.nextInt(1, 4); k++)
+                    {
+                        sb.insert(j, value);
+                    }
+                }
+                if (braindamageRandom.nextFloat() < 0.12f)
+                {
+                    sb.insert(j, "-" + sb.charAt(j));
+                }
+            }
+            if (Character.isWhitespace(sb.charAt(j)) && braindamageRandom.nextFloat() < 0.18f)
+            {
+                sb.insert(j, "....");
+            }
         }
 
         return sb.toString();
